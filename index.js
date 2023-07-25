@@ -55,19 +55,29 @@ async function run() {
       const result = await usersCollection.insertOne(user);
       res.send(result);
     });
-    app.post('/choice', async(req,res)=>{
+    app.post('/choice', async (req, res) => {
       const booking = req.body
       const result = await univercityBookingCollection.insertOne(booking)
       res.send(result)
     })
-    app.get('/choice', async (req,res)=>{
+    app.get('/choice', async (req, res) => {
       const result = await univercityBookingCollection.find().toArray()
       res.send(result)
     })
-    app.post('/reviws', async (req,res) =>{
+    app.post('/reviws', async (req, res) => {
       const reviw = req.body;
       const result = await reviwCollection.insertOne(reviw)
       res.send(result);
+    })
+    app.get('/reviws', async (req, res) => {
+      const result = await reviwCollection.find().toArray()
+      res.send(result);
+    })
+    app.get('/search/:name', async (req, res) => {
+      const name = req.params.name;
+      const query = { college_name: { $regex: new RegExp(name, 'i') } };
+      const results = await collegeCollection.find(query).toArray();
+      res.send(results)
     })
   } finally {
     // Ensures that the client will close when you finish/error
